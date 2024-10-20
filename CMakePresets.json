@@ -1,0 +1,80 @@
+{
+  "version": 2,
+  "configurePresets": [
+    {
+      "name": "dev",
+      "displayName": "dev",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build-dev",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "FEATURE_developer_build": "ON",
+        "FEATURE_icu": "OFF",
+        "FEATURE_dbus": "OFF",
+        "QT_BUILD_EXAMPLES": "OFF",
+        "QT_BUILD_TESTS": "OFF"
+      }
+    },
+    {
+      "name": "dev-namespaced",
+      "inherits": "dev",
+      "cacheVariables": {
+        "QT_NAMESPACE": "test"
+      }
+    },
+    {
+      "name": "dev-asan",
+      "displayName": "dev-asan",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build-dev-asan",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "FEATURE_developer_build": "ON",
+        "FEATURE_icu": "OFF",
+        "FEATURE_dbus": "OFF",
+        "QT_BUILD_EXAMPLES": "OFF",
+        "QT_BUILD_TESTS": "OFF",
+        "ECM_ENABLE_SANITIZERS": "'address;undefined'"
+      }
+    },
+    {
+      "name": "clazy",
+      "displayName": "clazy",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build-clazy",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "FEATURE_developer_build": "OFF",
+        "FEATURE_icu": "OFF",
+        "FEATURE_dbus": "OFF",
+        "QT_BUILD_EXAMPLES": "OFF",
+        "QT_BUILD_TESTS": "OFF"
+      },
+      "environment": {
+        "CC": "clang",
+        "CXX": "clazy"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "dev-qtwidgets",
+      "configurePreset": "dev",
+      "targets": [
+        "Widgets"
+      ]
+    },
+    {
+      "name": "clazy",
+      "configurePreset": "clazy",
+      "environment": {
+        "CC": "clang",
+        "CXX": "clazy",
+        "CLAZY_CHECKS": "use-static-qregularexpression,use-arrow-operator-instead-of-data,unexpected-flag-enumerator-value"
+      }
+    }
+  ]
+}
